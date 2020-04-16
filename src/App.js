@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {
+  lazy,
+  Suspense,
+  useState,
+} from 'react';
 
-function App() {
+import { MoonLoader } from 'react-spinners';
+
+//import Image from './components/image';
+// Code Splitting - Importación dinámica
+const Image = lazy(() => import('./components/image'));
+
+const App = () => {
+  const [show, setShow] = useState(false);
+  const toogle = () => setShow(!show);
+  const styles = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column'
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={styles}>
+      <button onClick={toogle}>
+        {show ? 'Ocultar' : 'Mostrar'}
+      </button>
+      {show && (
+        <Suspense fallback={<MoonLoader color="orangered" />}>
+          <Image />
+        </Suspense>
+      )}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
